@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorias</title>
+
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/categorias.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a class="navbar-brand" th:href="@{/home}">Johnny Almoxarifado</a>
+
+        <ul class="navbar-menu">
+            <li><a class="nav-link" th:href="@{/home}">Home</a></li>
+            <li><a class="nav-link" th:href="@{/produtos}">Produtos</a></li>
+            <li><a class="nav-link" th:href="@{/usuarios}">Usuários</a></li>
+            <li><a class="nav-link active" th:href="@{/categorias}">Categorias</a></li>
+            <li><a class="nav-link" th:href="@{/estoque}">Estoque</a></li>
+            <li><a class="nav-link" th:href="@{/movimentacoes}">Movimentações</a></li>
+            <li><form th:action="@{/logout}" method="post" style="display:inline"><button type="submit" class="nav-link" style="background:none;border:0;cursor:pointer">Sair</button></form></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="pagina-categorias">
+
+    <header class="cabecalho-pagina">
+        <h1>Gerenciamento de categorias</h1>
+        <div class="linha"></div>
+        <p>Cadastre, edite e organize as categorias utilizadas no sistema.</p>
+    </header>
+
+    <section class="card-categorias card-formulario">
+        <div class="card-cabecalho">
+            <div>
+                <h2 th:text="${categoriaForm.id == null ? 'Nova categoria' : 'Editar categoria'}">Nova categoria</h2>
+                <p th:text="${categoriaForm.id == null ? 'Informe o nome para cadastrar uma nova categoria.' : 'Altere o nome da categoria e salve as informações.'}">
+                    Informe o nome para cadastrar uma nova categoria.
+                </p>
+            </div>
+        </div>
+
+        <div class="mensagem sucesso" th:if="${mensagemCategoria}" th:text="${mensagemCategoria}"></div>
+        <div class="mensagem erro" th:if="${erroCategoria}" th:text="${erroCategoria}"></div>
+
+        <form th:action="@{/categorias/salvar}" method="post">
+            <input type="hidden" name="id" th:value="${categoriaForm.id}">
+
+            <div class="form-grid">
+                <div class="campo">
+                    <label for="nome">Nome da categoria</label>
+                    <input id="nome"
+                           name="nome"
+                           type="text"
+                           th:value="${categoriaForm.nome}"
+                           placeholder="Ex.: Eletrônicos"
+                           required>
+                </div>
+
+                <div class="form-acoes">
+                    <button class="btn btn-primary" type="submit">Salvar categoria</button>
+                    <a class="btn btn-secondary"
+                       th:if="${categoriaForm.id != null}"
+                       th:href="@{/categorias}">Cancelar</a>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <section class="card-categorias" style="margin-bottom:20px;">
+        <div class="card-cabecalho"><div><h2>Buscar categorias</h2><p>Filtre pelo nome da categoria.</p></div></div>
+        <form th:action="@{/categorias}" method="get" style="display:flex;gap:12px;flex-wrap:wrap;align-items:end;">
+            <div class="campo" style="flex:1;min-width:260px;"><label for="busca">Nome</label><input id="busca" name="busca" th:value="${busca}" placeholder="Digite o nome..."></div>
+            <button class="btn btn-primary" type="submit">Buscar</button><a class="btn btn-secondary" th:href="@{/categorias}">Limpar</a>
+        </form>
+    </section>
+
+    <section class="card-categorias card-lista">
+        <div class="card-cabecalho card-cabecalho-lista">
+            <div>
+                <h2>Categorias cadastradas</h2>
+                <p>Consulte as categorias e utilize as ações para editar ou excluir.</p>
+            </div>
+            <span class="contador-categorias"
+                  th:text="${#lists.size(categorias)} + ' categoria(s)'">0 categoria(s)</span>
+        </div>
+
+        <div class="tabela-container">
+            <table class="tabela-categorias">
+                <thead>
+                <tr>
+                    <th class="coluna-id">ID</th>
+                    <th>Nome</th>
+                    <th class="coluna-acoes">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="categoria : ${categorias}">
+                    <td class="coluna-id" th:text="${categoria.id}"></td>
+                    <td th:text="${categoria.nome}"></td>
+                    <td>
+                        <div class="acoes-tabela">
+                            <a class="btn btn-secondary"
+                               th:href="@{/categorias(editar=${categoria.id})}">Editar</a>
+
+                            <button th:if="${isAdmin}" class="btn btn-danger excluir-categoria"
+                                    type="button"
+                                    th:attr="data-id=${categoria.id},data-nome=${categoria.nome}">
+                                Excluir
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr class="linha-vazia" th:if="${#lists.isEmpty(categorias)}">
+                    <td th:attr="colspan=3">Nenhuma categoria cadastrada.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<script th:src="@{/excluir_categoria.js}"></script>
+</body>
+</html>

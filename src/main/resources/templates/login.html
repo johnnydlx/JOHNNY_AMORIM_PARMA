@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #eef1f5;
+            color: #333;
+        }
+
+        .pagina {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 900px;
+            min-height: 520px;
+            display: flex;
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Lado esquerdo */
+
+        .lado-esquerdo {
+            width: 45%;
+            background-color: #1769aa;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px;
+        }
+
+        .lado-esquerdo h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .lado-esquerdo p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #e3f2fd;
+        }
+
+        .linha {
+            width: 50px;
+            height: 4px;
+            background-color: white;
+            margin: 10px 0 20px;
+            border-radius: 2px;
+        }
+
+        /* Lado direito */
+
+        .lado-direito {
+            width: 55%;
+            padding: 50px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .titulo {
+            margin-bottom: 30px;
+        }
+
+        .titulo h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+            color: #222;
+        }
+
+        .titulo p {
+            margin: 0;
+            color: #777;
+        }
+
+        .campo {
+            margin-bottom: 20px;
+        }
+
+        .campo label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #444;
+        }
+
+        .campo input {
+            width: 100%;
+            height: 45px;
+            padding: 0 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .campo input:focus {
+            outline: none;
+            border-color: #1769aa;
+            box-shadow: 0 0 0 2px rgba(23, 105, 170, 0.1);
+        }
+
+
+        .botao {
+            width: 100%;
+            height: 45px;
+            border: none;
+            border-radius: 5px;
+            background-color: #1769aa;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .botao:hover {
+            background-color: #12588f;
+        }
+
+        .erro {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            color: #842029;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            .login-container {
+                width: 100%;
+                min-height: auto;
+            }
+
+            .lado-esquerdo {
+                display: none;
+            }
+
+            .lado-direito {
+                width: 100%;
+                padding: 35px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="pagina">
+
+    <div class="login-container">
+
+        <div class="lado-esquerdo">
+
+            <h2>Bem-vindo!
+            Johnny Almoxarifado</h2>
+
+            <div class="linha"></div>
+
+            <p>
+                Faça login para acessar sua conta
+                e continuar utilizando o sistema.
+            </p>
+
+        </div>
+
+        <div class="lado-direito">
+
+            <div class="titulo">
+                <h1>Entrar</h1>
+                <p>Informe seus dados para acessar sua conta.</p>
+            </div>
+
+            <div class="erro" th:if="${param.erro}">
+                E-mail ou senha inválidos.
+            </div>
+
+            <div class="erro" th:if="${param.logout}" style="background-color:#d1e7dd;color:#0f5132;">
+                Você saiu do sistema com sucesso.
+            </div>
+
+            <form th:action="@{/login}" method="post">
+
+                <div class="campo">
+                    <label for="username">E-mail</label>
+
+                    <input
+                            type="email"
+                            id="username"
+                            name="username"
+                            th:value="${email}"
+                            placeholder="seuemail@email.com"
+                            required>
+                </div>
+
+                <div class="campo">
+                    <label for="password">Senha</label>
+
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Digite sua senha"
+                            required>
+                </div>
+
+
+                <button type="submit" class="botao">
+                    Entrar
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

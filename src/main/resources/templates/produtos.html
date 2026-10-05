@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/usuarios.css}">
+    <link rel="stylesheet" th:href="@{/css/produtos.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a class="navbar-brand" th:href="@{/home}">Johnny Almoxarifado</a>
+        <ul class="navbar-menu">
+            <li><a class="nav-link" th:href="@{/home}">Home</a></li>
+            <li><a class="nav-link active" th:href="@{/produtos}">Produtos</a></li>
+            <li><a class="nav-link" th:href="@{/usuarios}">Usuários</a></li>
+            <li><a class="nav-link" th:href="@{/categorias}">Categorias</a></li>
+            <li><a class="nav-link" th:href="@{/estoque}">Estoque</a></li>
+            <li><a class="nav-link" th:href="@{/movimentacoes}">Movimentações</a></li>
+            <li><form th:action="@{/logout}" method="post" style="display:inline"><button type="submit" class="nav-link" style="background:none;border:0;cursor:pointer">Sair</button></form></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="pagina-usuarios">
+    <header class="cabecalho-pagina">
+        <h1>Gerenciamento de produtos</h1>
+        <div class="linha"></div>
+        <p>Cadastre, edite e consulte os produtos do sistema.</p>
+    </header>
+
+    <div class="mensagem sucesso" th:if="${mensagemProduto}" th:text="${mensagemProduto}"></div>
+    <div class="mensagem erro" th:if="${erroProduto}" th:text="${erroProduto}"></div>
+
+    <section class="card-usuarios card-formulario">
+        <div class="card-cabecalho">
+            <div>
+                <h2 th:text="${produtoForm.id == null ? 'Novo produto' : 'Editar produto'}">Novo produto</h2>
+                <p th:text="${produtoForm.id == null ? 'Preencha os dados abaixo para cadastrar um novo produto.' : 'Altere os dados necessários e salve as informações.'}">
+                    Preencha os dados abaixo para cadastrar um novo produto.
+                </p>
+            </div>
+        </div>
+
+        <form th:action="@{/produtos/salvar}" method="post">
+            <input type="hidden" name="id" th:value="${produtoForm.id}">
+
+            <div class="form-grid produto-grid">
+                <div class="campo campo-maior">
+                    <label for="nome">Nome</label>
+                    <input id="nome" name="nome" type="text" th:value="${produtoForm.nome}" placeholder="Nome do produto" required>
+                </div>
+
+                <div class="campo">
+                    <label for="preco">Preço</label>
+                    <input id="preco" name="preco" type="number" min="0" step="0.01" th:value="${produtoForm.preco}" placeholder="0,00" required>
+                </div>
+
+                <div class="campo">
+                    <label for="estoque">Estoque</label>
+                    <input id="estoque" name="estoque" type="number" min="0" th:value="${produtoForm.estoque}" placeholder="0" th:readonly="${produtoForm.id != null}" required>
+                    <small class="descricao-produto" th:if="${produtoForm.id != null}">Use as movimentações para alterar o estoque.</small>
+                </div>
+
+                <div class="campo">
+                    <label for="estoqueMinimo">Estoque mínimo</label>
+                    <input id="estoqueMinimo" name="estoqueMinimo" type="number" min="0" th:value="${produtoForm.estoqueMinimo}" placeholder="0" required>
+                </div>
+
+                <div class="campo">
+                    <label for="categoriaId">Categoria</label>
+                    <select id="categoriaId" name="categoriaId">
+                        <option value="">Sem categoria</option>
+                        <option th:each="categoria : ${categorias}"
+                                th:value="${categoria.id}"
+                                th:text="${categoria.nome}"
+                                th:selected="${produtoForm.categoriaId == categoria.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="ativo">Status</label>
+                    <select id="ativo" name="ativo">
+                        <option value="true" th:selected="${produtoForm.ativo == null || produtoForm.ativo}">Ativo</option>
+                        <option value="false" th:selected="${produtoForm.ativo != null && !produtoForm.ativo}">Inativo</option>
+                    </select>
+                </div>
+
+                <div class="campo campo-descricao">
+                    <label for="descricao">Descrição</label>
+                    <textarea id="descricao" name="descricao" rows="3" th:text="${produtoForm.descricao}" placeholder="Descrição do produto"></textarea>
+                </div>
+
+                <div class="form-acoes campo-acoes-produto">
+                    <button class="btn btn-primary" type="submit">Salvar produto</button>
+                    <a class="btn btn-secondary" th:if="${produtoForm.id != null}" th:href="@{/produtos}">Cancelar</a>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <section class="card-usuarios" style="margin-bottom:20px;">
+        <div class="card-cabecalho">
+            <div><h2>Buscar produtos</h2><p>Filtre por nome e data de cadastro.</p></div>
+        </div>
+        <form th:action="@{/produtos}" method="get" style="display:flex;gap:12px;flex-wrap:wrap;align-items:end;">
+            <div class="campo" style="flex:1;min-width:220px;"><label for="busca">Nome do produto</label><input id="busca" name="busca" th:value="${busca}" placeholder="Digite o nome..."></div>
+            <div class="campo"><label for="dataInicio">Data inicial</label><input id="dataInicio" name="dataInicio" type="date" th:value="${dataInicio}"></div>
+            <div class="campo"><label for="dataFim">Data final</label><input id="dataFim" name="dataFim" type="date" th:value="${dataFim}"></div>
+            <button class="btn btn-primary" type="submit">Buscar</button>
+            <a class="btn btn-secondary" th:href="@{/produtos}">Limpar</a>
+        </form>
+    </section>
+
+    <section class="card-usuarios card-lista">
+        <div class="card-cabecalho card-cabecalho-lista">
+            <div>
+                <h2>Produtos cadastrados</h2>
+                <p>Consulte os produtos disponíveis no sistema.</p>
+            </div>
+            <span class="contador-usuarios" th:text="${totalProdutos} + ' produto(s)'">0 produto(s)</span>
+        </div>
+
+        <div class="tabela-container">
+            <table class="tabela-usuarios tabela-produtos">
+                <thead>
+                <tr>
+                    <th class="coluna-id">ID</th>
+                    <th>Produto</th>
+                    <th>Data</th>
+                    <th>Preço</th>
+                    <th>Estoque</th>
+                    <th>Estoque mínimo</th>
+                    <th>Categoria</th>
+                    <th>Status</th>
+                    <th class="coluna-acoes">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="produto : ${produtos}">
+                    <td class="coluna-id" th:text="${produto.id}"></td>
+                    <td>
+                        <strong th:text="${produto.nome}"></strong>
+                        <small class="descricao-produto" th:if="${produto.descricao != null && !produto.descricao.isBlank()}" th:text="${produto.descricao}"></small>
+                    </td>
+                    <td th:text="${produto.dataCadastro != null ? #temporals.format(produto.dataCadastro, 'dd/MM/yyyy') : '-'}"></td>
+                    <td th:text="${'R$ ' + #numbers.formatDecimal(produto.preco, 1, 2)}"></td>
+                    <td>
+                        <span th:text="${produto.estoque}"></span>
+                        <span class="status-produto status-estoque-baixo"
+                              th:if="${produto.ativo && produto.estoque <= produto.estoqueMinimo}">Baixo</span>
+                    </td>
+                    <td th:text="${produto.estoqueMinimo}"></td>
+                    <td th:text="${produto.categoriaNome != null ? produto.categoriaNome : '-'}"></td>
+                    <td><span class="status-produto" th:classappend="${produto.ativo ? ' status-ativo' : ' status-inativo'}" th:text="${produto.ativo ? 'Ativo' : 'Inativo'}"></span></td>
+                    <td>
+                        <div class="acoes-tabela">
+                            <a class="btn btn-secondary" th:href="@{/produtos(editar=${produto.id})}">Editar</a>
+                            <button th:if="${isAdmin}" class="btn btn-danger excluir-produto" type="button" th:attr="data-id=${produto.id}">Excluir</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="linha-vazia" th:if="${#lists.isEmpty(produtos)}">
+                    <td th:colspan="8">Nenhum produto cadastrado.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="display:flex;justify-content:center;gap:8px;align-items:center;padding:20px;" th:if="${totalPaginas > 1}">
+            <a class="btn btn-secondary" th:if="${paginaAtual > 0}"
+               th:href="@{/produtos(pagina=${paginaAtual - 1},busca=${busca},dataInicio=${dataInicio},dataFim=${dataFim})}">Anterior</a>
+            <span th:text="${'Página ' + (paginaAtual + 1) + ' de ' + totalPaginas}"></span>
+            <a class="btn btn-secondary" th:if="${paginaAtual + 1 < totalPaginas}"
+               th:href="@{/produtos(pagina=${paginaAtual + 1},busca=${busca},dataInicio=${dataInicio},dataFim=${dataFim})}">Próxima</a>
+        </div>
+    </section>
+</main>
+
+<script th:src="@{/excluir_produto.js}"></script>
+</body>
+</html>

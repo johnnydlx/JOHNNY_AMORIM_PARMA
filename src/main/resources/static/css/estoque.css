@@ -1,0 +1,356 @@
+/* ==================== PAGINA ==================== */
+.pagina-estoque {
+    width: min(1250px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 38px 0 55px;
+}
+
+.cabecalho-pagina {
+    margin-bottom: 24px;
+}
+
+.cabecalho-pagina h1 {
+    margin: 0 0 8px;
+    color: #202833;
+    font-size: 28px;
+}
+
+.cabecalho-pagina .linha {
+    width: 50px;
+    height: 4px;
+    margin: 10px 0 13px;
+    border-radius: 2px;
+    background-color: #1769aa;
+}
+
+.cabecalho-pagina p {
+    margin: 0;
+    color: #7a8493;
+    font-size: 13px;
+}
+
+.card-estoque {
+    background-color: #fff;
+    border: 1px solid #e5eaf0;
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 3px 12px rgba(22, 33, 45, 0.04);
+}
+
+.card-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card-cabecalho h2 {
+    margin: 0 0 5px;
+    color: #29323d;
+    font-size: 19px;
+}
+
+.card-cabecalho p {
+    margin: 0;
+    color: #7a8493;
+    font-size: 13px;
+}
+
+.card-cabecalho-lista {
+    align-items: flex-start;
+}
+
+/* ==================== ALERTA ==================== */
+.alerta-estoque {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px 17px;
+    margin-bottom: 18px;
+    border: 1px solid #f0d28b;
+    border-radius: 9px;
+    background-color: #fff8e7;
+    color: #6f4d00;
+}
+
+.alerta-estoque strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.alerta-estoque p {
+    margin: 0;
+    color: #866a28;
+    font-size: 12px;
+}
+
+.contador-alerta,
+.contador-estoque {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 6px 10px;
+    border-radius: 15px;
+    background-color: #f4f6f8;
+    color: #5f6b79;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* ==================== FORMULARIO ==================== */
+.form-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 16px;
+    align-items: end;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 7px;
+    color: #444;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.campo input,
+.campo select {
+    width: 100%;
+    min-height: 42px;
+    padding: 0 12px;
+    border: 1px solid #d8dee6;
+    border-radius: 7px;
+    background-color: #fff;
+    color: #344054;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.campo input:focus,
+.campo select:focus {
+    outline: none;
+    border-color: #1769aa;
+    box-shadow: 0 0 0 3px rgba(23, 105, 170, 0.08);
+}
+
+.form-acoes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn {
+    min-height: 36px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    padding: 8px 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    transition: 0.18s;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background-color: #1769aa;
+    border-color: #1769aa;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #12588f;
+    border-color: #12588f;
+}
+
+.btn-secondary {
+    background-color: #f7f9fb;
+    border-color: #dfe5eb;
+    color: #425466;
+}
+
+.btn-secondary:hover {
+    background-color: #eef3f7;
+}
+
+/* ==================== MENSAGENS ==================== */
+.mensagem {
+    padding: 11px 13px;
+    margin-bottom: 17px;
+    border-radius: 7px;
+    border: 1px solid transparent;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.sucesso {
+    background-color: #edf8f2;
+    border-color: #cce9d8;
+    color: #17633b;
+}
+
+.erro {
+    background-color: #fff1f2;
+    border-color: #f0c9ce;
+    color: #8a2330;
+}
+
+/* ==================== TABELA ==================== */
+.tabela-container {
+    overflow-x: auto;
+    border: 1px solid #e5eaf0;
+    border-radius: 9px;
+    background-color: #fff;
+}
+
+.tabela-estoque {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px;
+}
+
+.tabela-estoque th,
+.tabela-estoque td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid #edf0f3;
+    vertical-align: middle;
+}
+
+.tabela-estoque th {
+    background-color: #f7f9fb;
+    color: #647181;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.45px;
+}
+
+.tabela-estoque td {
+    color: #344054;
+    font-size: 13px;
+}
+
+.tabela-estoque tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.tabela-estoque tbody tr:hover {
+    background-color: #fbfdff;
+}
+
+.tabela-estoque td strong {
+    display: block;
+    color: #29323d;
+}
+
+.tabela-estoque td small {
+    display: block;
+    margin-top: 3px;
+    color: #8993a1;
+    font-size: 11px;
+}
+
+.coluna-id {
+    width: 60px;
+    color: #7a8493;
+}
+
+.linha-vazia td {
+    padding: 30px 16px;
+    text-align: center;
+    color: #7a8493;
+}
+
+/* ==================== STATUS ==================== */
+.status-estoque,
+.tipo-movimentacao {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 5px 9px;
+    border-radius: 14px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-normal,
+.tipo-entrada {
+    background-color: #edf8f2;
+    color: #17633b;
+}
+
+.status-baixo,
+.tipo-saida {
+    background-color: #fff1f2;
+    color: #a82a38;
+}
+
+/* ==================== RESPONSIVO ==================== */
+@media (max-width: 900px) {
+    .pagina-estoque {
+        width: min(900px, calc(100% - 30px));
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .form-acoes {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 700px) {
+    .pagina-estoque {
+        width: calc(100% - 30px);
+        padding: 26px 0 38px;
+    }
+
+    .cabecalho-pagina h1 {
+        font-size: 25px;
+    }
+
+    .card-estoque {
+        padding: 19px 16px 20px;
+    }
+
+    .card-cabecalho-lista,
+    .alerta-estoque {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-acoes {
+        grid-column: auto;
+    }
+
+    .form-acoes .btn {
+        width: 100%;
+    }
+
+    .tabela-estoque {
+        min-width: 850px;
+    }
+}
+
+
+.aviso-sem-permissao { border-left: 4px solid #1769aa; }

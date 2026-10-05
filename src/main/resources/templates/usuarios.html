@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuários</title>
+
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/usuarios.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a class="navbar-brand" th:href="@{/home}">Johnny Almoxarifado</a>
+
+        <ul class="navbar-menu">
+            <li><a class="nav-link" th:href="@{/home}">Home</a></li>
+            <li><a class="nav-link" th:href="@{/produtos}">Produtos</a></li>
+            <li><a class="nav-link active" th:href="@{/usuarios}">Usuários</a></li>
+            <li><a class="nav-link" th:href="@{/categorias}">Categorias</a></li>
+            <li><a class="nav-link" th:href="@{/estoque}">Estoque</a></li>
+            <li><a class="nav-link" th:href="@{/movimentacoes}">Movimentações</a></li>
+            <li><form th:action="@{/logout}" method="post" style="display:inline"><button type="submit" class="nav-link" style="background:none;border:0;cursor:pointer">Sair</button></form></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="pagina-usuarios">
+
+    <header class="cabecalho-pagina">
+        <h1>Gerenciamento de usuários</h1>
+        <div class="linha"></div>
+        <p>Cadastre, edite e gerencie os usuários que possuem acesso ao sistema.</p>
+    </header>
+
+    <section class="card-usuarios card-formulario">
+        <div class="card-cabecalho">
+            <div>
+                <h2 th:text="${usuarioForm.id == null ? 'Novo usuário' : 'Editar usuário'}">Novo usuário</h2>
+                <p th:text="${usuarioForm.id == null ? 'Preencha os dados abaixo para cadastrar um novo usuário.' : 'Altere os dados necessários e salve as informações.'}">
+                    Preencha os dados abaixo para cadastrar um novo usuário.
+                </p>
+            </div>
+        </div>
+
+        <div class="mensagem sucesso" th:if="${mensagemUsuario}" th:text="${mensagemUsuario}"></div>
+        <div class="mensagem erro" th:if="${erroUsuario}" th:text="${erroUsuario}"></div>
+
+        <form th:action="@{/usuarios/salvar}" method="post">
+            <input type="hidden" name="id" th:value="${usuarioForm.id}">
+
+            <div class="form-grid">
+                <div class="campo">
+                    <label for="nome">Nome</label>
+                    <input id="nome" name="nome" type="text" th:value="${usuarioForm.nome}" placeholder="Nome completo" required>
+                </div>
+
+                <div class="campo">
+                    <label for="email">E-mail</label>
+                    <input id="email" name="email" type="email" th:value="${usuarioForm.email}" placeholder="usuario@email.com" required>
+                </div>
+
+                <div class="campo" th:if="${usuarioForm.id == null}">
+                    <label for="senha">Senha</label>
+                    <input id="senha" name="senha" type="password" placeholder="Digite a senha" required>
+                </div>
+
+                <div class="campo" th:if="${isAdmin}">
+                    <label for="userRole">Perfil</label>
+                    <select id="userRole" name="userRole">
+                        <option value="0" th:selected="${usuarioForm.userRole == null || usuarioForm.userRole == 0}">Usuário</option>
+                        <option value="1" th:selected="${usuarioForm.userRole == 1}">Administrador</option>
+                    </select>
+                </div>
+
+                <div class="form-acoes">
+                    <button class="btn btn-primary" type="submit">Salvar usuário</button>
+                    <a class="btn btn-secondary" th:if="${usuarioForm.id != null}" th:href="@{/usuarios}">Cancelar</a>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <section class="card-usuarios" style="margin-bottom:20px;">
+        <div class="card-cabecalho"><div><h2>Buscar pessoas</h2><p>Pesquise por nome, e-mail ou perfil.</p></div></div>
+        <form th:action="@{/usuarios}" method="get" style="display:flex;gap:12px;flex-wrap:wrap;align-items:end;">
+            <div class="campo" style="flex:1;min-width:280px;"><label for="busca">Nome, e-mail ou perfil</label><input id="busca" name="busca" th:value="${busca}" placeholder="Ex.: João, email@..., administrador..."></div>
+            <button class="btn btn-primary" type="submit">Buscar</button><a class="btn btn-secondary" th:href="@{/usuarios}">Limpar</a>
+        </form>
+    </section>
+
+    <section class="card-usuarios card-lista">
+        <div class="card-cabecalho card-cabecalho-lista">
+            <div>
+                <h2>Usuários cadastrados</h2>
+                <p>Consulte os usuários e utilize as ações para editar, trocar senha ou excluir.</p>
+            </div>
+            <span class="contador-usuarios" th:text="${#lists.size(usuarios)} + ' usuário(s)'">0 usuário(s)</span>
+        </div>
+
+        <div class="tabela-container">
+            <table class="tabela-usuarios">
+                <thead>
+                <tr>
+                    <th class="coluna-id">ID</th>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Perfil</th>
+                    <th class="coluna-acoes">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="usuario : ${usuarios}">
+                    <td class="coluna-id" th:text="${usuario.id}"></td>
+                    <td th:text="${usuario.nome}"></td>
+                    <td th:text="${usuario.email}"></td>
+                    <td th:text="${usuario.userRole == 1 ? 'Administrador' : 'Usuário'}"></td>
+                    <td>
+                        <div class="acoes-tabela">
+                            <a class="btn btn-secondary"
+                               th:href="@{/usuarios(editar=${usuario.id})}">Editar</a>
+
+                            <button th:if="${isAdmin}" class="btn btn-warning trocar-senha"
+                                    type="button"
+                                    th:attr="data-email=${usuario.email},data-nome=${usuario.nome}">
+                                Trocar senha
+                            </button>
+
+                            <button th:if="${isAdmin}" class="btn btn-danger excluir"
+                                    type="button"
+                                    th:attr="data-id=${usuario.id}">
+                                Excluir
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr class="linha-vazia" th:if="${#lists.isEmpty(usuarios)}">
+                    <td th:attr="colspan=${isAdmin ? 5 : 4}">Nenhum usuário cadastrado.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<dialog id="modalSenha" th:if="${isAdmin}">
+    <div class="modal-conteudo">
+        <div class="modal-cabecalho">
+            <h2>Trocar senha</h2>
+            <p id="usuarioSenha"></p>
+        </div>
+
+        <form id="formTrocaSenha">
+            <div class="campo modal-campo">
+                <label for="senhaAtual">Senha atual</label>
+                <input id="senhaAtual" type="password" placeholder="Digite a senha atual" required>
+            </div>
+
+            <div class="campo modal-campo">
+                <label for="senhaNova">Nova senha</label>
+                <input id="senhaNova" type="password" minlength="8" placeholder="Mínimo de 8 caracteres" required>
+            </div>
+
+            <div class="campo modal-campo">
+                <label for="senhaNovaConfirmacao">Confirmar nova senha</label>
+                <input id="senhaNovaConfirmacao" type="password" minlength="8" placeholder="Repita a nova senha" required>
+            </div>
+
+            <div id="retornoSenha"></div>
+
+            <div class="modal-acoes">
+                <button class="btn btn-secondary" type="button" id="cancelarSenha">Cancelar</button>
+                <button class="btn btn-primary" type="submit">Alterar senha</button>
+            </div>
+        </form>
+    </div>
+</dialog>
+
+<script th:src="@{/excluir_usuario.js}"></script>
+<script>
+    const modalSenha = document.getElementById('modalSenha');
+    const formTrocaSenha = document.getElementById('formTrocaSenha');
+    const retornoSenha = document.getElementById('retornoSenha');
+    let emailSelecionado = '';
+
+    document.querySelectorAll('.trocar-senha').forEach(function (button) {
+        button.addEventListener('click', function () {
+            emailSelecionado = this.dataset.email;
+            document.getElementById('usuarioSenha').textContent = this.dataset.nome + ' - ' + emailSelecionado;
+            retornoSenha.textContent = '';
+            retornoSenha.className = '';
+            formTrocaSenha.reset();
+            modalSenha.showModal();
+        });
+    });
+
+    document.getElementById('cancelarSenha').addEventListener('click', function () {
+        modalSenha.close();
+    });
+
+    formTrocaSenha.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const dados = {
+            senhaAtual: document.getElementById('senhaAtual').value,
+            senhaNova: document.getElementById('senhaNova').value,
+            senhaNovaConfirmacao: document.getElementById('senhaNovaConfirmacao').value
+        };
+
+        try {
+            const response = await fetch('/usuario/senha/' + encodeURIComponent(emailSelecionado), {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
+                },
+                body: JSON.stringify(dados)
+            });
+
+            const mensagem = await response.text();
+            retornoSenha.textContent = mensagem;
+            retornoSenha.className = response.ok ? 'retorno-sucesso' : 'retorno-erro';
+
+            if (response.ok) {
+                formTrocaSenha.reset();
+                setTimeout(function () {
+                    modalSenha.close();
+                }, 900);
+            }
+        } catch (error) {
+            retornoSenha.textContent = 'Erro ao comunicar com o servidor.';
+            retornoSenha.className = 'retorno-erro';
+        }
+    });
+</script>
+
+</body>
+</html>

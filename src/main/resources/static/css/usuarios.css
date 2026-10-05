@@ -1,0 +1,468 @@
+/* ==================== PÁGINA DE USUÁRIOS ==================== */
+.pagina-usuarios {
+    width: 100%;
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 34px 24px 48px;
+}
+
+.cabecalho-pagina {
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto 22px;
+}
+
+.cabecalho-pagina h1 {
+    margin: 0 0 8px;
+    color: #202833;
+    font-size: 29px;
+    line-height: 1.2;
+}
+
+.cabecalho-pagina p {
+    margin: 0;
+    color: #667085;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.cabecalho-pagina .linha {
+    width: 44px;
+    height: 4px;
+    margin: 0 0 14px;
+}
+
+.card-usuarios {
+    background-color: #fff;
+    border: 1px solid #e5eaf0;
+    border-radius: 12px;
+    box-shadow: 0 7px 22px rgba(24, 45, 68, 0.07);
+}
+
+/* Formulário mais compacto, sem ocupar a tela toda */
+.card-formulario {
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto 22px;
+    padding: 23px 25px 24px;
+}
+
+.card-lista {
+    width: 100%;
+    margin: 0 auto;
+    padding: 23px 25px 25px;
+}
+
+.card-cabecalho {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 20px;
+}
+
+.card-cabecalho h2 {
+    margin: 0 0 5px;
+    color: #202833;
+    font-size: 19px;
+    line-height: 1.25;
+}
+
+.card-cabecalho p {
+    margin: 0;
+    color: #7a8493;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.card-cabecalho-lista {
+    align-items: center;
+}
+
+.contador-usuarios {
+    flex: 0 0 auto;
+    padding: 7px 11px;
+    border: 1px solid #dce8f2;
+    border-radius: 999px;
+    background-color: #f5f9fc;
+    color: #1769aa;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* ==================== FORMULÁRIO ==================== */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    align-items: end;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 7px;
+    color: #3e4651;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.campo input {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid #d7dde5;
+    border-radius: 7px;
+    background-color: #fff;
+    color: #2f3742;
+    font-family: inherit;
+    font-size: 13px;
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.campo input::placeholder {
+    color: #a0a8b3;
+}
+
+.campo input:focus {
+    outline: none;
+    border-color: #1769aa;
+    background-color: #fcfeff;
+    box-shadow: 0 0 0 3px rgba(23, 105, 170, 0.10);
+}
+
+.form-acoes {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 2px;
+}
+
+/* ==================== BOTÕES ==================== */
+.btn {
+    min-height: 36px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    padding: 8px 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    transition: background-color 0.18s, border-color 0.18s, color 0.18s, transform 0.15s, box-shadow 0.18s;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background-color: #1769aa;
+    border-color: #1769aa;
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(23, 105, 170, 0.16);
+}
+
+.btn-primary:hover {
+    background-color: #12588f;
+    border-color: #12588f;
+}
+
+.btn-secondary {
+    background-color: #f7f9fb;
+    border-color: #dfe5eb;
+    color: #425466;
+}
+
+.btn-secondary:hover {
+    background-color: #eef3f7;
+    border-color: #cfd8e1;
+}
+
+.btn-warning {
+    background-color: #fff8e7;
+    border-color: #f3d999;
+    color: #8a5a00;
+}
+
+.btn-warning:hover {
+    background-color: #fff1cc;
+    border-color: #e9c66c;
+}
+
+.btn-danger {
+    background-color: #fff1f2;
+    border-color: #efc9ce;
+    color: #a82a38;
+}
+
+.btn-danger:hover {
+    background-color: #ffe3e6;
+    border-color: #e7aeb5;
+}
+
+/* ==================== MENSAGENS ==================== */
+.mensagem {
+    padding: 11px 13px;
+    border-radius: 7px;
+    margin-bottom: 17px;
+    border: 1px solid transparent;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.sucesso {
+    background-color: #edf8f2;
+    border-color: #cce9d8;
+    color: #17633b;
+}
+
+.erro {
+    background-color: #fff1f2;
+    border-color: #f0c9ce;
+    color: #8a2330;
+}
+
+/* ==================== TABELA ==================== */
+.tabela-container {
+    overflow-x: auto;
+    border: 1px solid #e5eaf0;
+    border-radius: 9px;
+    background-color: #fff;
+}
+
+.tabela-usuarios {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 760px;
+    table-layout: auto;
+}
+
+.tabela-usuarios th,
+.tabela-usuarios td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid #edf0f3;
+    vertical-align: middle;
+}
+
+.tabela-usuarios th {
+    background-color: #f7f9fb;
+    color: #647181;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.45px;
+}
+
+.tabela-usuarios td {
+    color: #344054;
+    font-size: 13px;
+}
+
+.tabela-usuarios tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.tabela-usuarios tbody tr:not(.linha-vazia):hover {
+    background-color: #fbfdff;
+}
+
+.tabela-usuarios tbody td:nth-child(2) {
+    font-weight: 600;
+    color: #29323d;
+}
+
+.coluna-id {
+    width: 62px;
+    color: #7a8493;
+}
+
+.coluna-acoes {
+    width: 300px;
+}
+
+/* Os três botões ficam na mesma linha */
+.acoes-tabela {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.acoes-tabela .btn {
+    min-height: 34px;
+    padding: 7px 11px;
+    font-size: 11px;
+}
+
+.linha-vazia td {
+    padding: 30px 16px;
+    text-align: center;
+    color: #7a8493;
+}
+
+/* ==================== MODAL TROCA DE SENHA ==================== */
+dialog {
+    width: min(440px, calc(100% - 30px));
+    border: 0;
+    border-radius: 13px;
+    padding: 0;
+    background-color: #fff;
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.25);
+}
+
+dialog::backdrop {
+    background-color: rgba(22, 33, 45, 0.48);
+}
+
+.modal-conteudo {
+    padding: 25px;
+}
+
+.modal-cabecalho {
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #edf0f3;
+}
+
+.modal-cabecalho h2 {
+    margin: 0 0 6px;
+    color: #202833;
+    font-size: 20px;
+}
+
+.modal-cabecalho p {
+    margin: 0;
+    color: #7a8493;
+    font-size: 13px;
+}
+
+.modal-campo {
+    margin-bottom: 13px;
+}
+
+.modal-acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+#retornoSenha {
+    min-height: 18px;
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.retorno-sucesso {
+    color: #17633b;
+}
+
+.retorno-erro {
+    color: #8a2330;
+}
+
+/* ==================== RESPONSIVO ==================== */
+@media (max-width: 900px) {
+    .pagina-usuarios {
+        max-width: 900px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .form-acoes {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 700px) {
+    .pagina-usuarios {
+        padding: 26px 15px 38px;
+    }
+
+    .cabecalho-pagina {
+        margin-bottom: 18px;
+    }
+
+    .cabecalho-pagina h1 {
+        font-size: 25px;
+    }
+
+    .card-formulario,
+    .card-lista {
+        padding: 19px 16px 20px;
+    }
+
+    .card-cabecalho,
+    .card-cabecalho-lista {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-acoes {
+        grid-column: auto;
+        justify-content: stretch;
+    }
+
+    .form-acoes .btn {
+        flex: 1;
+    }
+
+    .tabela-usuarios {
+        min-width: 720px;
+    }
+
+    .modal-conteudo {
+        padding: 21px 17px;
+    }
+
+    .modal-acoes {
+        flex-direction: column-reverse;
+    }
+
+    .modal-acoes .btn {
+        width: 100%;
+    }
+}
+
+.campo select {
+    width: 100%;
+    min-height: 42px;
+    padding: 0 12px;
+    border: 1px solid #d8dee6;
+    border-radius: 7px;
+    background-color: #fff;
+    color: #344054;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.campo select:focus {
+    outline: none;
+    border-color: #1769aa;
+    box-shadow: 0 0 0 3px rgba(23, 105, 170, 0.08);
+}
+
+
+.aviso-sem-permissao { border-left: 4px solid #1769aa; }

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-container">
+
+        <a class="navbar-brand" th:href="@{/home}">
+            Johnny Almoxarifado
+        </a>
+
+        <ul class="navbar-menu">
+
+            <!-- Home -->
+            <li>
+                <a class="nav-link active" th:href="@{/home}">
+                    Home
+                </a>
+            </li>
+
+            <!-- Produtos -->
+            <li>
+                <a class="nav-link" th:href="@{/produtos}">
+                    Produtos
+                </a>
+            </li>
+
+            <!-- Usuários -->
+            <li>
+                <a class="nav-link" th:href="@{/usuarios}">
+                    Usuários
+                </a>
+            </li>
+
+            <!-- Categorias -->
+            <li>
+                <a class="nav-link" th:href="@{/categorias}">
+                    Categorias
+                </a>
+            </li>
+
+            <!-- Estoque -->
+            <li>
+                <a class="nav-link" th:href="@{/estoque}">
+                    Estoque
+                </a>
+            </li>
+
+            <!-- Movimentações -->
+            <li>
+                <a class="nav-link" th:href="@{/movimentacoes}">
+                    Movimentações
+                </a>
+            </li>
+
+            <!-- Logout -->
+            <li>
+                <form th:action="@{/logout}" method="post" style="display:inline"><button type="submit" class="nav-link" style="background:none;border:0;cursor:pointer">Sair</button></form>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+
+<!-- Conteúdo principal -->
+<main class="pagina">
+
+    <div class="home-container">
+
+        <div class="welcome-card">
+
+            <div class="titulo">
+                <h1>Bem-vindo ao sistema</h1>
+                <div class="linha"></div>
+            </div>
+
+            <!-- Usuário logado -->
+            <h6 class="descricao">
+                Bem vindo -
+                <span th:if="${usuarioLogado}"
+                      th:text="${usuarioLogado.usuarioNome}">
+                </span>
+            </h6>
+
+            <p class="descricao">
+                Esta é a página inicial do sistema.
+                Utilize o menu abaixo para consultar os módulos do sistema.
+            </p>
+
+            <section class="alertas-home" th:if="${!#lists.isEmpty(baixoEstoque)}">
+                <div class="alerta-home alerta-home-baixo">
+                    <div class="alerta-icone">!</div>
+                    <div>
+                        <strong>Atenção: estoque baixo</strong>
+                        <p th:text="${#lists.size(baixoEstoque) + ' produto(s) atingiram ou estão abaixo do estoque mínimo.'}">0 produto(s) com estoque baixo.</p>
+                    </div>
+                    <a class="botao-alerta" th:href="@{/estoque}">Ver estoque</a>
+                </div>
+
+                <div class="lista-alertas-home">
+                    <div class="item-alerta-home" th:each="produto : ${baixoEstoque}">
+                        <span th:text="${produto.nome}">Produto</span>
+                        <strong th:text="${produto.estoque + ' / mínimo ' + produto.estoqueMinimo}">0 / mínimo 0</strong>
+                    </div>
+                </div>
+            </section>
+
+            <section class="alerta-home alerta-home-ok" th:if="${#lists.isEmpty(baixoEstoque)}">
+                <div class="alerta-icone">✓</div>
+                <div>
+                    <strong>Estoque em situação normal</strong>
+                    <p>Nenhum produto ativo está abaixo ou no limite do estoque mínimo.</p>
+                </div>
+            </section>
+
+            <!-- Ações -->
+            <div class="acoes">
+
+                <a class="botao" th:href="@{/produtos}">
+                    Produtos
+                </a>
+
+                <a class="botao" th:href="@{/usuarios}">
+                    Usuários
+                </a>
+
+                <a class="botao" th:href="@{/categorias}">
+                    Categorias
+                </a>
+
+                <a class="botao" th:href="@{/estoque}">
+                    Estoque
+                </a>
+
+                <a class="botao" th:href="@{/movimentacoes}">
+                    Movimentações
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+</html>

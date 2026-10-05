@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estoque</title>
+
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/estoque.css}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a class="navbar-brand" th:href="@{/home}">Johnny Almoxarifado</a>
+
+        <ul class="navbar-menu">
+            <li><a class="nav-link" th:href="@{/home}">Home</a></li>
+            <li><a class="nav-link" th:href="@{/produtos}">Produtos</a></li>
+            <li><a class="nav-link" th:href="@{/usuarios}">Usuários</a></li>
+            <li><a class="nav-link" th:href="@{/categorias}">Categorias</a></li>
+            <li><a class="nav-link active" th:href="@{/estoque}">Estoque</a></li>
+            <li><a class="nav-link" th:href="@{/movimentacoes}">Movimentações</a></li>
+            <li><form th:action="@{/logout}" method="post" style="display:inline"><button type="submit" class="nav-link" style="background:none;border:0;cursor:pointer">Sair</button></form></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="pagina-estoque">
+
+    <header class="cabecalho-pagina">
+        <h1>Gestão de estoque</h1>
+        <div class="linha"></div>
+        <p>Controle as entradas, saídas e os níveis mínimos dos produtos.</p>
+    </header>
+
+    <div class="mensagem sucesso" th:if="${mensagemMovimentacao}" th:text="${mensagemMovimentacao}"></div>
+    <div class="mensagem erro" th:if="${erroMovimentacao}" th:text="${erroMovimentacao}"></div>
+
+    <section class="alerta-estoque" th:if="${!#lists.isEmpty(baixoEstoque)}">
+        <div>
+            <strong>Atenção: produtos com estoque baixo</strong>
+            <p>Os produtos abaixo atingiram ou estão abaixo do estoque mínimo cadastrado.</p>
+        </div>
+
+        <span class="contador-alerta"
+              th:text="${#lists.size(baixoEstoque)} + ' item(ns)'">
+            0 item(ns)
+        </span>
+    </section>
+
+    <section class="card-estoque card-formulario">
+        <div class="card-cabecalho">
+            <div>
+                <h2>Nova movimentação</h2>
+                <p>Registre uma entrada ou saída para atualizar o estoque automaticamente.</p>
+            </div>
+        </div>
+
+        <form th:action="@{/movimentacoes/salvar}" method="post">
+
+            <div class="form-grid">
+                <div class="campo">
+                    <label for="produtoId">Produto</label>
+                    <select id="produtoId" name="produtoId" required>
+                        <option value="">Selecione um produto</option>
+                        <option th:each="produto : ${produtos}"
+                                th:if="${produto.ativo}"
+                                th:value="${produto.id}"
+                                th:text="${produto.nome + ' - estoque: ' + produto.estoque}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="tipo">Tipo</label>
+                    <select id="tipo" name="tipo" required>
+                        <option value="ENTRADA">Entrada</option>
+                        <option value="SAIDA">Saída</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="quantidade">Quantidade</label>
+                    <input id="quantidade"
+                           name="quantidade"
+                           type="number"
+                           min="1"
+                           placeholder="0"
+                           required>
+                </div>
+
+                <div class="form-acoes">
+                    <button class="btn btn-primary" type="submit">Registrar movimentação</button>
+                </div>
+            </div>
+
+        </form>
+    </section>
+
+    <section class="card-estoque" style="margin-bottom:20px;">
+        <div class="card-cabecalho"><div><h2>Buscar no estoque</h2><p>Filtre os produtos exibidos no estoque pelo nome.</p></div></div>
+        <form th:action="@{/estoque}" method="get" style="display:flex;gap:12px;flex-wrap:wrap;align-items:end;">
+            <div class="campo" style="flex:1;min-width:260px;"><label for="busca">Produto</label><input id="busca" name="busca" th:value="${busca}" placeholder="Digite o nome do produto..."></div>
+            <button class="btn btn-primary" type="submit">Buscar</button><a class="btn btn-secondary" th:href="@{/estoque}">Limpar</a>
+        </form>
+    </section>
+
+    <section class="card-estoque card-lista">
+        <div class="card-cabecalho card-cabecalho-lista">
+            <div>
+                <h2>Produtos em estoque</h2>
+                <p>Lista ordenada do menor para o maior estoque.</p>
+            </div>
+            <span class="contador-estoque"
+                  th:text="${#lists.size(estoque)} + ' produto(s)'">
+                0 produto(s)
+            </span>
+        </div>
+
+        <div class="tabela-container">
+            <table class="tabela-estoque">
+                <thead>
+                <tr>
+                    <th class="coluna-id">ID</th>
+                    <th>Produto</th>
+                    <th>Estoque atual</th>
+                    <th>Estoque mínimo</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="produto : ${estoque}">
+                    <td class="coluna-id" th:text="${produto.id}"></td>
+                    <td>
+                        <strong th:text="${produto.nome}"></strong>
+                        <small th:if="${produto.categoria != null}"
+                               th:text="${produto.categoria.nome}"></small>
+                    </td>
+                    <td th:text="${produto.estoque}"></td>
+                    <td th:text="${produto.estoqueMinimo}"></td>
+                    <td>
+                        <span class="status-estoque"
+                              th:classappend="${produto.ativo && produto.estoque <= produto.estoqueMinimo ? ' status-baixo' : ' status-normal'}"
+                              th:text="${!produto.ativo ? 'Inativo' : (produto.estoque <= produto.estoqueMinimo ? 'Estoque baixo' : 'Normal')}">
+                        </span>
+                    </td>
+                </tr>
+
+                <tr class="linha-vazia" th:if="${#lists.isEmpty(estoque)}">
+                    <td colspan="5">Nenhum produto cadastrado.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card-estoque card-lista">
+        <div class="card-cabecalho card-cabecalho-lista">
+            <div>
+                <h2>Últimas movimentações</h2>
+                <p>Histórico das entradas e saídas realizadas no sistema.</p>
+            </div>
+            <a class="btn btn-secondary" th:href="@{/movimentacoes}">Ver histórico completo</a>
+        </div>
+
+        <div class="tabela-container">
+            <table class="tabela-estoque">
+                <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Produto</th>
+                    <th>Tipo</th>
+                    <th>Quantidade</th>
+                    <th>Estoque após</th>
+                    <th>Usuário</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="movimentacao, indice : ${movimentacoes}"
+                    th:if="${indice.index < 8}">
+                    <td th:text="${#temporals.format(movimentacao.data, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${movimentacao.produtoNome}"></td>
+                    <td>
+                        <span class="tipo-movimentacao"
+                              th:classappend="${movimentacao.tipo == 'ENTRADA' ? ' tipo-entrada' : ' tipo-saida'}"
+                              th:text="${movimentacao.tipo == 'ENTRADA' ? 'Entrada' : 'Saída'}">
+                        </span>
+                    </td>
+                    <td th:text="${movimentacao.quantidade}"></td>
+                    <td th:text="${movimentacao.estoqueAtual}"></td>
+                    <td th:text="${movimentacao.usuarioNome}"></td>
+                </tr>
+
+                <tr class="linha-vazia" th:if="${#lists.isEmpty(movimentacoes)}">
+                    <td colspan="6">Nenhuma movimentação registrada.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>
